@@ -5,23 +5,23 @@ trigger:
 pool: ironman
 
 stages:
-  - stage: Build
-    displayName: Installing Terraform
+
+  - stage: Terraform_Stage
+    displayName: Terraform Init → FMT → Validate → Plan + Manual Approval
     jobs:
-      - job: TF_installation
-        displayName: Installing Terraform
+
+      - job: Terraform_Job
+        displayName: Full Terraform Process
         steps:
+
+          
           - task: TerraformInstaller@1
             inputs:
               terraformVersion: 'latest'
-  - stage: Build2
-    displayName: Running Terraform Init
-    jobs:
-      - job: Terraform_init
-        displayName: Terraform init
-        steps:
 
+         
           - task: TerraformTask@5
+            displayName: Terraform Init
             inputs:
               provider: 'azurerm'
               command: 'init'
@@ -31,31 +31,28 @@ stages:
               backendAzureRmContainerName: 'yuvicntr'
               backendAzureRmKey: 'assignment.tfstate'
 
-  - stage: Build3
-    displayName: Running Terraform FMT
-    jobs:
-      - job: Terraform_fmt
-        displayName: terraform fmt
-        steps:
+          
+          - task: PowerShell@2
+            displayName: Terraform FMT
+            inputs:
+              targetType: 'inline'
+              script: |
+                terraform fmt -recursive
 
-        - task: PowerShell@2
-          inputs:
-            targetType: 'inline'
-            script: 'terraform fmt'
-  - stage: Build4
-    displayName: Running Terraform Plan
-    jobs:
-      - job: Terraform_Plan
-        displayName: Terraform plan
-        steps:
-        - task: PowerShell@2
-          inputs:
-            targetType: 'inline'
-            script: 'terraform init'
-                
-        - task: TerraformTask@5
-          inputs:
-            provider: 'azurerm'
-            command: 'plan'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-            environmentServiceNameAzureRM: 'Azure-to-ado-svc2'
+          - task: TerraformTask@5
+            displayName: Terraform Validate
+            inputs:
+              provider: 'azurerm'
+              command: 'validate'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+
+         
+          - task: TerraformTask@5
+            displayName: Terraform Plan
+            inputs:
+              provider: 'azurerm'
+              command: 'plan'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+              environmentServiceNameAzureRM: 'Azure-to-ado-svc2'
+
+    
