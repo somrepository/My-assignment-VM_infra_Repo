@@ -15,7 +15,7 @@ stages:
             inputs:
               terraformVersion: 'latest'
   - stage: Build2
-    displayName: Running Init
+    displayName: Running Terraform Init
     jobs:
       - job: Terraform_init
         displayName: Terraform init
@@ -32,7 +32,7 @@ stages:
               backendAzureRmKey: 'assignment.tfstate'
 
   - stage: Build3
-    displayName: Running FMT
+    displayName: Running Terraform FMT
     jobs:
       - job: Terraform_fmt
         displayName: terraform fmt
@@ -42,3 +42,16 @@ stages:
           inputs:
             targetType: 'inline'
             script: 'terraform fmt'
+  - stage: Build4
+    displayName: Running Terraform Plan
+    jobs:
+      - job: Terraform_Plan
+        displayName: Terraform plan
+        steps:
+                
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+            environmentServiceNameAzureRM: 'Azure-to-ado-svc2'
