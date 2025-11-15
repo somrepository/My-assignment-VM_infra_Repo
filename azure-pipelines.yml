@@ -8,7 +8,7 @@ stages:
   - stage: Build
     displayName: Label 1
     jobs:
-      - job: TFinstallation
+      - job: TF_installation
         displayName: Installing Terraform
         steps:
           - task: TerraformInstaller@1
@@ -17,11 +17,16 @@ stages:
   - stage: Build2
     displayName: Label 2
     jobs:
-      - job: Terraform_FMT
-        displayName: Terraform FMT
+      - job: Terraform_init
+        displayName: Terraform init
         steps:
-        - task: PowerShell@2
-          inputs:
-            targetType: 'inline'
-            script: 'terraform fmt'
-          
+
+          - task: TerraformTask@5
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+              backendServiceArm: 'Azure-to-ado-svc2'
+              backendAzureRmStorageAccountName: 'yuvistg'
+              backendAzureRmContainerName: 'yuvicntr'
+              backendAzureRmKey: 'assignment.tfstate'
