@@ -9,9 +9,19 @@ stages:
     displayName: Label 1
     jobs:
       - job: TFinstallation
-        displayName: Label 2
+        displayName: Installing Terraform
         steps:
           - task: TerraformInstaller@1
             inputs:
               terraformVersion: 'latest'
-  # - stage: 
+  - stage: Build2
+    displayName: Label 2
+    jobs:
+      - job: Terraform_FMT
+        displayName: Terraform FMT
+        steps:
+        - task: PowerShell@2
+          inputs:
+            targetType: 'inline'
+            script: 'terraform fmt'
+          
