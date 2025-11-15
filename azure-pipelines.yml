@@ -6,13 +6,12 @@ pool: ironman
 
 stages:
   - stage: Build
-    displayName: running build
+    displayName: Label 1
     jobs:
       - job: TFinstallation
-        displayName: Terraform Installation
+        displayName: Label 2
         steps:
           - task: TerraformInstaller@1
             inputs:
               terraformVersion: 'latest'
-
-  
+  # - stage: 
