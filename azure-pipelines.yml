@@ -6,7 +6,7 @@ pool: ironman
 
 stages:
   - stage: Build
-    displayName: Label 1
+    displayName: Installing Terraform
     jobs:
       - job: TF_installation
         displayName: Installing Terraform
@@ -15,7 +15,7 @@ stages:
             inputs:
               terraformVersion: 'latest'
   - stage: Build2
-    displayName: Label 2
+    displayName: Running Init
     jobs:
       - job: Terraform_init
         displayName: Terraform init
