@@ -15,10 +15,13 @@ stages:
         steps:
           
           - task: PowerShell@2
+            displayName: Run Checkov & Generate Report
             continueOnError: true
             inputs:
               targetType: 'inline'
-              script: 'checkov -d .'
+              script: |
+                checkov -d . --output json > $(System.DefaultWorkingDirectory)/checkov-report.json
+                checkov -d . --output html > $(System.DefaultWorkingDirectory)/checkov-report.html
           
           - task: TerraformInstaller@1
             inputs:
