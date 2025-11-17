@@ -13,7 +13,11 @@ stages:
       - job: Terraform_Job
         displayName: Full Terraform Process
         steps:
-
+          
+          - task: PowerShell@2
+            inputs:
+              targetType: 'inline'
+              script: 'checkov -d .'
           
           - task: TerraformInstaller@1
             inputs:
@@ -47,14 +51,8 @@ stages:
               command: 'validate'
               workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
 
-         
-          - task: PowerShell@2
-            inputs:
-              targetType: 'inline'
-              script: 'checkov -d .'
-              
-            
-              
+                   
+                        
           
           - task: TerraformTask@5
             displayName: Terraform Plan
