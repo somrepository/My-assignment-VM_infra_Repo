@@ -74,5 +74,15 @@ stages:
               environmentServiceNameAzureRM: 'Azure-to-ado-svc2'
 
               
-
+  - stage: ManualApproval
+    dependsOn: Terraform_Stage
+    jobs:
+    - job: WaitForValidation
+      pool: server # This job is agentless
+      steps:
+      - task: ManualValidation@0
+        inputs:
+          notifyUsers: 'somverma.dell@gmail.com'
+          instructions: 'Please review the build artifacts and approve to proceed with deployment.'
+        displayName: 'Manual Validation'
     
