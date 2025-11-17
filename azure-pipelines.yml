@@ -21,6 +21,13 @@ stages:
               targetType: 'inline'
               script: |
                 checkov -d . --output json > checkov-report.json
+          
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish Checkov Reports"
+            inputs:
+              PathtoPublish: '$(System.DefaultWorkingDirectory)'
+              ArtifactName: 'checkov-reports'
+              publishLocation: 'Container'
 
           
           - task: TerraformInstaller@1
