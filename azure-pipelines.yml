@@ -20,8 +20,8 @@ stages:
             inputs:
               targetType: 'inline'
               script: |
-                checkov -d . --output json > $(System.DefaultWorkingDirectory)/checkov-report.json
-                checkov -d . --output html > $(System.DefaultWorkingDirectory)/checkov-report.html
+                checkov -d . --output json > checkov-report.json
+
           
           - task: TerraformInstaller@1
             inputs:
